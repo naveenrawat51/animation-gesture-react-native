@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { View, Animated, PanResponder, Dimensions } from 'react-native';
+import {
+    View,
+    Animated,
+    PanResponder,
+    Dimensions,
+    StyleSheet,
+} from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
-export default function Deck({ data, renderCard, onSwipeLeft, onSwipeRight }) {
+export default function Deck({
+    data,
+    renderCard,
+    onSwipeLeft,
+    onSwipeRight,
+    noMoreCards,
+}) {
     const [index, setIndex] = useState(0);
     const position = new Animated.ValueXY();
 
@@ -62,24 +74,42 @@ export default function Deck({ data, renderCard, onSwipeLeft, onSwipeRight }) {
         };
     };
 
-    const renderCards = () =>
-        data.map((item, ind) => {
-            if (ind < index) {
-                return null;
-            }
-            if (ind === index) {
+    const renderCards = () => {
+        if (index >= data.length) {
+            return noMoreCards();
+        }
+
+        return data
+            .map((item, ind) => {
+                if (ind < index) {
+                    return null;
+                }
+                if (ind === index) {
+                    return (
+                        <Animated.View
+                            key={item.id}
+                            style={[getCardStyle(), styles.cardStyle]}
+                            {...panResponder.panHandlers}
+                        >
+                            {renderCard(item)}
+                        </Animated.View>
+                    );
+                }
                 return (
-                    <Animated.View
-                        key={item.id}
-                        style={getCardStyle()}
-                        {...panResponder.panHandlers}
-                    >
+                    <View key={item.id} style={styles.cardStyle}>
                         {renderCard(item)}
-                    </Animated.View>
+                    </View>
                 );
-            }
-            return renderCard(item);
-        });
+            })
+            .reverse();
+    };
 
     return <View>{renderCards()}</View>;
 }
+
+const styles = StyleSheet.create({
+    cardStyle: {
+        position: 'absolute',
+        width: SCREEN_WIDTH,
+    },
+});

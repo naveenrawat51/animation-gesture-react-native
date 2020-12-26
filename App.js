@@ -67,6 +67,14 @@ export default function App() {
         </Card>
     );
 
+    const noMoreCards = () => {
+        return (
+            <Card>
+                <Text style={{ marginVertical: 10 }}>No more cards!!</Text>
+            </Card>
+        );
+    };
+
     useEffect(() => {
         Animated.spring(position, {
             toValue: { x: 200, y: 500 },
@@ -84,6 +92,7 @@ export default function App() {
                 renderCard={renderCard}
                 onSwipeLeft={() => {}}
                 onSwipeRight={() => {}}
+                noMoreCards={noMoreCards}
             />
         </View>
     );
@@ -94,5 +103,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         marginVertical: 50,
+    },
+    cardStyle: {
+        position: 'absolute',
     },
 });
