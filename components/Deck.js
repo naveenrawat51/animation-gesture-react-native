@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Animated,
     PanResponder,
     Dimensions,
     StyleSheet,
+    LayoutAnimation,
+    UIManager,
 } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -30,10 +32,16 @@ export default function Deck({
 
     const onSwipeComplete = (direction) => {
         const item = data[index];
-        direction === 'right' ? onSwipeRight(item) : onSwipeLeft(item);
+        //direction === 'right' ? onSwipeRight(item) : onSwipeLeft(item);
         position.setValue({ x: 0, y: 0 });
         setIndex(index + 1);
     };
+
+    useEffect(() => {
+        UIManager.setLayoutAnimationEnabledExperimental &&
+            UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.spring();
+    }, [index]);
 
     const forceSwipe = (direction) => {
         const x = direction === 'right' ? SCREEN_WIDTH : -SCREEN_WIDTH;
@@ -96,9 +104,12 @@ export default function Deck({
                     );
                 }
                 return (
-                    <View key={item.id} style={styles.cardStyle}>
+                    <Animated.View
+                        key={item.id}
+                        style={[styles.cardStyle, { top: 10 * (ind - index) }]}
+                    >
                         {renderCard(item)}
-                    </View>
+                    </Animated.View>
                 );
             })
             .reverse();
