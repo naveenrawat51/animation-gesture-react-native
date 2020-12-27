@@ -18,11 +18,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.maruti.trackOnMap",
+      "bundleIdentifier": "com.maruti.tinderSwipe",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.maruti.trackOnMap",
+      "package": "com.maruti.tinderSwipe",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
